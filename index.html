@@ -139,13 +139,33 @@
 </body>
 
 <script type="application/javascript">
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const day_of_moon = urlParams.get('d') || 0.10
-    console.log(`day_of_moon = ${day_of_moon}`);
+    function compute_moon_phase(date) {
+        const date_new_moon = new Date("2000-01-06 18:14"),
+              lunar_days = 29.53058770576;
+        date = date || new Date();
+
+        var d_seconds = (date.getTime() - date_new_moon.getTime())/1000,
+            lunar_seconds = lunar_days * 24 * 60 * 60,
+            moon_phase = (d_seconds % lunar_seconds) / lunar_seconds;
+        moon_phase = (moon_phase<0) ? moon_phase + 1 : moon_phase;
+
+        console.log(`${date} moon_phase = ${moon_phase}`)
+        return moon_phase;
+    }
+
+    const now_moon_phase = compute_moon_phase()
+    console.log(`now_moon_phase = ${now_moon_phase}`)
+
+    const queryString = window.location.search,
+          urlParams = new URLSearchParams(queryString),
+          moon_phase = urlParams.get('phase') || now_moon_phase;
+    console.log(`moon_phase = ${moon_phase}`);
+
+    // set_moon_phase(compute_moon_phase(new Date("2000-01-06 18:14")))
+    // set_moon_phase(compute_moon_phase(new Date("2020-10-02 15:07")))
 
     function set_moon_phase(a) {
-        console.warn(`set_moon_phase(${a})`)
+        console.log(`set_moon_phase(${a})`)
         var r = 160;
 
         var rx_left = r,
@@ -197,9 +217,9 @@
 
 
 <script>
-    jQuery("#slider").slider("value", day_of_moon);
+    jQuery("#slider").slider("value", moon_phase);
     // jQuery("#phase").trigger('slidechange');
-    set_moon_phase(day_of_moon)
+    set_moon_phase(moon_phase)
 </script>
 
 <script type="text/javascript">
