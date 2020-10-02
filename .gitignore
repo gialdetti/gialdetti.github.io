@@ -1,0 +1,11 @@
+# IntelliJ
+.DS_Store
+.idea
+.idea/
+.idea/*
+/.idea/
+.idea/modules.xml
+.idea/misc.xml
+
+# VSCode
+.vscode/
