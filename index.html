@@ -113,7 +113,7 @@
             </pattern>
 
             <filter id="f1" x="0" y="0">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="1" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
             </filter>
         </defs>
 
@@ -140,10 +140,9 @@
 
 <script type="application/javascript">
     const queryString = window.location.search;
-    console.log(queryString);
     const urlParams = new URLSearchParams(queryString);
     const day_of_moon = urlParams.get('d') || 0.10
-    console.log(day_of_moon);
+    console.log(`day_of_moon = ${day_of_moon}`);
 
     function set_moon_phase(a) {
         console.warn(`set_moon_phase(${a})`)
