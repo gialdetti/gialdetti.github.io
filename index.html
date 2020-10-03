@@ -20,9 +20,9 @@
         position: relative;
         font: 1em sans-serif;
 
-        background: -webkit-linear-gradient(to top, #283E51, #0A2342, #000 50%);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to top, #283E51, #0A2342, #000 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-        background: -olinear-gradient(to top, #283E51, #0A2342, #000 50%);
+        background: -webkit-linear-gradient(to top, #0A2342, #000 50%);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to top, #0A2342, #000 50%); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: -olinear-gradient(to top, #0A2342, #000 50%);
 
     }
     body {
@@ -30,8 +30,8 @@
     }
 
     .moon-container {
-        width: 320px;
-        height: 320px;
+        width: 400px;
+        height: 400px;
 
         position: absolute;
         margin: 100px auto;
@@ -61,32 +61,45 @@
     .widget {
         position: absolute;
         bottom: 0;
-        right: 0;
-        margin: 3em;
-        opacity: .9;
+        margin: 32px;
+        opacity: .8;
+        color: lightgoldenrodyellow;
     }
 
     .widget .title {
         text-align: center;
-        color: lightgoldenrodyellow;
-        font-size: 1.4em;
+        font-size: 1.2em;
         font-family: Tahoma, Geneva, sans-serif;
+        opacity: 0.4;
     }
 
-    .widget .slider-container {
+    .widget-right {
+        right: 0;
+    }
+
+    .widget-right .slider-container {
         /*width: 100px;*/
         margin: 20px auto;
         opacity: 0;
         transition: opacity .5s;
     }
 
-    .widget:hover .title {
+    .widget-right:hover .title {
         text-shadow: 0 0 1px lightyellow;
     }
 
-    .widget:hover .slider-container {
-        opacity: 0.25;
+    .widget-right:hover .slider-container {
+        opacity: 0.4;
         transition: opacity 1s;
+    }
+
+    .widget-left {
+        left:0;
+        color: white;
+        font-family: 'Courier New';
+        font-size: 1.4em;
+        font-weight: bold;
+        width:200px
     }
 
     canvas {
@@ -109,16 +122,15 @@
     <svg xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%">
         <defs>
             <pattern id="image" patternUnits="userSpaceOnUse" height="100%" width="100%">
-                <image x="0" y="0" height="100%" width="100%" xlink:href="images/fullmoon_nadav.jpg"></image>
+                <image x="0" y="0" height="100%" width="100%" xlink:href="images/fullmoon_nasa_christmas2015.jpg"></image>
             </pattern>
 
             <filter id="f1" x="0" y="0">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
             </filter>
         </defs>
 
-        <circle cx="160" cy="160" r="160"
-                stroke="black" stroke-width="1" fill="url(#image)"/>
+        <circle cx="200" cy="200" r="200" fill="url(#image)"/>
 
         <path d="M160 0
                  A160 160 0 1 0 160 320
@@ -128,13 +140,16 @@
     <a href="https://www.itainadav.com" target="_blank">itai<b>nadav</b></a>
 </div>
 
-<div class="widget">
+<div class="widget widget-right">
     <div class="slider-container">
         <div id="slider"></div>
     </div>
     <div class="title">gialdetti</div>
 </div>
 
+<div class="widget widget-left">
+    PM 09:43:44<br>Oct 02 2020
+</div>
 
 </body>
 
@@ -166,7 +181,7 @@
 
     function set_moon_phase(a) {
         console.log(`set_moon_phase(${a})`)
-        var r = 160;
+        var r = 200;
 
         var rx_left = r,
             rx_right = r,
@@ -213,13 +228,35 @@
     // for (i=0; i<1; i=i+0.1) { console.warn(i, Math.heavy(i, 0, 0.25)) }
 </script>
 
-
-
-
 <script>
     jQuery("#slider").slider("value", moon_phase);
     // jQuery("#phase").trigger('slidechange');
     set_moon_phase(moon_phase)
+
+    const dt_options = {
+            year: 'numeric',
+            month: 'short',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: true     // setting 24 hour format
+        },
+        dt_formatter = Intl.DateTimeFormat('en-US', dt_options);
+
+    function updateClock() {
+        var dt = new Date();
+        // dt = new Date("2020/01/02 15:04:05");
+        // dt = new Date("2020/10/02 21:43:44");
+        var dt_a = dt_formatter.format(dt).split(/[\s,]+/),
+            dt_s = `${dt_a.slice(-1)} ${dt_a.slice(-2, -1)}<br>${dt_a.slice(0, 3).join(' ')}`;
+
+        $('.widget-left').html(dt_s);
+
+        setTimeout(updateClock, 1000);
+    }
+    updateClock()
+
 </script>
 
 <script type="text/javascript">
