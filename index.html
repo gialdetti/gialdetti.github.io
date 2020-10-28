@@ -27,8 +27,8 @@
 </head>
 
 <script src="scripts/jquery.min.js"></script>
-<script src="scripts/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="scripts/jquery-ui.css"/>
+<script src="scripts/semantic.js"></script>
+<link rel="stylesheet" href="scripts/semantic.css"/>
 
 <script src="scripts/particles.min.js"></script>
 
@@ -123,6 +123,21 @@
         width:200px
     }
 
+    .ui.range {
+        padding: 0 !important;
+    }
+    .ui.range .inner,
+    .ui.range .inner .track,
+    .ui.range .inner .track-fill {
+        height: 1.2em !important;
+        top: 0 !important;
+    }
+    .ui.range .inner .thumb {
+        /*border-radius: 5px;*/
+        width: 1.2em;
+        height: 1.2em;
+    }
+
     canvas {
         display: block;
         vertical-align: bottom;
@@ -163,7 +178,7 @@
 
 <div class="widget widget-right">
     <div class="slider-container">
-        <div id="slider"></div>
+        <div class="ui olive inverted range" id="range-1"></div>
     </div>
     <div class="title">gialdetti</div>
 </div>
@@ -228,16 +243,20 @@
         $('.moon-path').attr('d', d)
     }
 
-    jQuery("#slider").slider({
-        min: 0,
-        max: 1,
-        value: 0,
-        step: 0.01,
-        slide: function( event, ui ) {
-            // console.warn( ui.value )
-            a = ui.value
-            set_moon_phase(a)
-        }
+    $(document).ready(function() {
+        $('#range-1').range({
+            min: 0,
+            max: 1,
+            start: moon_phase,
+            step: 0,
+            smooth: true,
+            onChange: function(value) {
+                set_moon_phase(value)
+            },
+            onMove: function(value) {
+                set_moon_phase(value)
+            }
+        });
     });
 
     Math.heavy = function(x, a, b) {
@@ -247,9 +266,9 @@
 </script>
 
 <script>
-    jQuery("#slider").slider("value", moon_phase);
+    // jQuery("#slider").slider("value", moon_phase);
     // jQuery("#phase").trigger('slidechange');
-    set_moon_phase(moon_phase)
+    // set_moon_phase(moon_phase)
 
     const dt_options = {
             year: 'numeric',
